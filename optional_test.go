@@ -9,6 +9,8 @@ const wrongError = "Error was %v not expected."
 const errorExpected = "No Error was returned. Expected %v."
 const panicExpected = "The Optional did not panic."
 
+const helloWorld = "Hello World!"
+
 var test interface{} = interface{}(testStruct{v: 12, n: "test"})
 var anotherTest interface{} = interface{}(testStruct{v: 13, n: "anotherTest"})
 var wrongTypeTest interface{} = interface{}(wrongTypeStruct{})

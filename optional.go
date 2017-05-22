@@ -44,7 +44,7 @@ func (opt *Optional) NotNil() (*Optional, error) {
 	return opt, nil
 }
 
-// WithDefaultTypeValue set a given Optional to use a given default value should the Optional be un-Initialized. Panics if default value is incorrect type for the current Optional. Should the Optional's value be nil will allow all types (due to the type being interface{}). Returns the Optional.
+// WithDefaultTypeValue set a given Optional to use a given default value should the Optional be un-Initialized. Panics if default value is incorrect type for the current Optional. Should the Optional's value be nil will allow all types (due to the type being interface{}) Returns the Optional.
 func (opt *Optional) WithDefaultTypeValue(def *interface{}) *Optional {
 
 	if *opt.v != nil {
