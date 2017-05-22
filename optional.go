@@ -36,7 +36,7 @@ func (opt *Optional) GetValue() interface{} {
 // NotNil allows a not nil value to be added to given Optional. Returns the Optional and should the Optional's value be nil a (NILVALUE) error
 func (opt *Optional) NotNil() (*Optional, error) {
 
-	if *opt.v == nil || *opt.v == (interface{}(nil)) {
+	if *opt.v == nil {
 		return opt, fmt.Errorf(NILVALUE)
 	}
 
@@ -44,9 +44,12 @@ func (opt *Optional) NotNil() (*Optional, error) {
 	return opt, nil
 }
 
-// WithDefaultTypeValue set a given Optional to use a given default value should the Optional be un-Initialized. Panics if default value is incorrect type for the current Optional. Returns the Optional.
+// WithDefaultTypeValue set a given Optional to use a given default value should the Optional be un-Initialized. Panics if default value is incorrect type for the current Optional. Should the Optional's value be nil will allow all types (due to the type being interface{}). Returns the Optional.
 func (opt *Optional) WithDefaultTypeValue(def *interface{}) *Optional {
-	typeCheck(*opt.t, def)
+
+	if *opt.v != nil {
+		typeCheck(*opt.t, def)
+	}
 
 	if !opt.WasInitialized() {
 		opt.v = def
@@ -58,9 +61,7 @@ func (opt *Optional) WithDefaultTypeValue(def *interface{}) *Optional {
 // Nillable allows a value either nil or otherwise to be added to the given Optional. Returns the Optional.
 func (opt *Optional) Nillable() *Optional {
 
-	fmt.Printf("opt.v = %v\n", *opt.v)
-
-	if *opt.v == nil || *opt.v == (interface{}(reflect.New(*opt.t))) {
+	if *opt.v == nil {
 		return opt
 	}
 
@@ -71,18 +72,18 @@ func (opt *Optional) Nillable() *Optional {
 // From returns an Optional from a given value
 func From(v *interface{}) *Optional {
 	var t reflect.Type
-	if v == nil {
+	if *v == nil {
 		t = reflect.TypeOf(v).Elem()
 	} else {
-		t = reflect.TypeOf(v)
+		t = reflect.TypeOf(*v)
 	}
 	return &Optional{v: v, t: &t, init: false}
 }
 
 func typeCheck(optType reflect.Type, value *interface{}) {
-	t := reflect.ValueOf(*value)
+	t := reflect.TypeOf(*value)
 
-	if t.Type() != optType {
+	if t != optType {
 		panic(fmt.Errorf(INCORRECTTYPE, t, optType))
 	}
 }

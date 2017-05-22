@@ -1,9 +1,6 @@
 package optional
 
-import (
-	"fmt"
-	"testing"
-)
+import "testing"
 
 const initializedError = "Optional was Initialized. Initialized = %v."
 const notInitializedError = "Optional was not Initialized. Initialized = %v."
@@ -16,7 +13,7 @@ var test interface{} = interface{}(testStruct{v: 12, n: "test"})
 var anotherTest interface{} = interface{}(testStruct{v: 13, n: "anotherTest"})
 var wrongTypeTest interface{} = interface{}(wrongTypeStruct{})
 var nilTestStruct testStruct
-var nilTest interface{} = interface{}(nilTestStruct)
+var nilTest interface{}
 
 type testStruct struct {
 	v int
@@ -56,8 +53,6 @@ func TestOptionalCreation(t *testing.T) {
 }
 
 func TestOptionalNilCreation(t *testing.T) {
-	fmt.Printf("nilTest = %v.\n", nilTest)
-
 	opt := From(&nilTest)
 	if opt.WasInitialized() {
 		t.Errorf(notInitializedError, opt.WasInitialized())
