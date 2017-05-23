@@ -34,7 +34,8 @@ func (opt *Optional) GetValue() interface{} {
 }
 
 // NotNil allows a not nil value to be added to given Optional. Returns the Optional and should the Optional's value be nil a (NILVALUE) error
-func (opt *Optional) NotNil() (*Optional, error) {
+func NotNil(v *interface{}) (*Optional, error) {
+	opt := from(v)
 
 	if *opt.v == nil {
 		return opt, fmt.Errorf(NILVALUE)
@@ -59,7 +60,8 @@ func (opt *Optional) WithDefaultTypeValue(def *interface{}) *Optional {
 }
 
 // Nillable allows a value either nil or otherwise to be added to the given Optional. Returns the Optional.
-func (opt *Optional) Nillable() *Optional {
+func Nillable(v *interface{}) *Optional {
+	opt := from(v)
 
 	if *opt.v == nil {
 		return opt
@@ -69,8 +71,7 @@ func (opt *Optional) Nillable() *Optional {
 	return opt
 }
 
-// From returns an Optional from a given value
-func From(v *interface{}) *Optional {
+func from(v *interface{}) *Optional {
 	var t reflect.Type
 	if *v == nil {
 		t = reflect.TypeOf(v).Elem()
