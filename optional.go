@@ -18,7 +18,7 @@ const (
 //
 // Author: Jack Wainwright - 20-05-2017
 type Optional struct {
-	v    *interface{}
+	v    interface{}
 	t    *reflect.Type
 	init bool
 }
@@ -30,14 +30,14 @@ func (opt *Optional) WasInitialized() bool {
 
 // GetValue returns the value of given Optional as a new value.
 func (opt *Optional) GetValue() interface{} {
-	return *opt.v
+	return opt.v
 }
 
 // NotNil allows a not nil value to be added to given Optional. Returns the Optional and should the Optional's value be nil a (NILVALUE) error
-func NotNil(v *interface{}) (*Optional, error) {
+func NotNil(v interface{}) (*Optional, error) {
 	opt := from(v)
 
-	if *opt.v == nil {
+	if opt.v == nil {
 		return opt, fmt.Errorf(NILVALUE)
 	}
 
@@ -46,9 +46,9 @@ func NotNil(v *interface{}) (*Optional, error) {
 }
 
 // WithDefaultTypeValue set a given Optional to use a given default value should the Optional be un-Initialized. Panics if default value is incorrect type for the current Optional. Should the Optional's value be nil will allow all types (due to the type being interface{}) Returns the Optional.
-func (opt *Optional) WithDefaultTypeValue(def *interface{}) *Optional {
+func (opt *Optional) WithDefaultTypeValue(def interface{}) *Optional {
 
-	if *opt.v != nil {
+	if opt.v != nil {
 		typeCheck(*opt.t, def)
 	}
 
@@ -60,10 +60,10 @@ func (opt *Optional) WithDefaultTypeValue(def *interface{}) *Optional {
 }
 
 // Nillable allows a value either nil or otherwise to be added to the given Optional. Returns the Optional.
-func Nillable(v *interface{}) *Optional {
+func Nillable(v interface{}) *Optional {
 	opt := from(v)
 
-	if *opt.v == nil {
+	if opt.v == nil {
 		return opt
 	}
 
@@ -71,18 +71,13 @@ func Nillable(v *interface{}) *Optional {
 	return opt
 }
 
-func from(v *interface{}) *Optional {
-	var t reflect.Type
-	if *v == nil {
-		t = reflect.TypeOf(v).Elem()
-	} else {
-		t = reflect.TypeOf(*v)
-	}
+func from(v interface{}) *Optional {
+	t := reflect.TypeOf(v)
 	return &Optional{v: v, t: &t, init: false}
 }
 
-func typeCheck(optType reflect.Type, value *interface{}) {
-	t := reflect.TypeOf(*value)
+func typeCheck(optType reflect.Type, value interface{}) {
+	t := reflect.TypeOf(value)
 
 	if t != optType {
 		panic(fmt.Errorf(INCORRECTTYPE, t, optType))

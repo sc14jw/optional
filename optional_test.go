@@ -27,49 +27,17 @@ type wrongTypeStruct struct{}
 func TestOptionalCreation(t *testing.T) {
 
 	var err error
-	opt, err := NotNil(&test)
+	opt, err := NotNil(test)
 
 	if !opt.WasInitialized() {
 		t.Errorf(notInitializedError, opt.WasInitialized())
 	} else if opt.GetValue() != test {
-		t.Errorf(getValueError, opt.GetValue(), &test)
+		t.Errorf(getValueError, opt.GetValue(), test)
 	} else if err != nil {
 		t.Errorf(wrongError, err)
 	}
 
-	opt = Nillable(&test)
-
-	if !opt.WasInitialized() {
-		t.Errorf(notInitializedError, opt.WasInitialized())
-	} else if opt.GetValue() != test {
-		t.Errorf(getValueError, opt.GetValue(), &test)
-	}
-
-}
-
-func TestOptionalNilCreation(t *testing.T) {
-	var err error
-	opt, err := NotNil(&nilTest)
-
-	if opt.WasInitialized() {
-		t.Errorf(initializedError, opt.WasInitialized())
-	} else if opt.GetValue() != nilTest {
-		t.Errorf(getValueError, opt.GetValue(), &nilTest)
-	} else if err == nil {
-		t.Errorf(errorExpected, NILVALUE)
-	}
-
-	opt = Nillable(&nilTest)
-
-	if opt.WasInitialized() {
-		t.Errorf(initializedError, opt.WasInitialized())
-	} else if opt.GetValue() != nilTest {
-		t.Errorf(getValueError, opt.GetValue(), &nilTest)
-	}
-}
-
-func TestDefaultValue(t *testing.T) {
-	opt := Nillable(&test).WithDefaultTypeValue(&anotherTest)
+	opt = Nillable(test)
 
 	if !opt.WasInitialized() {
 		t.Errorf(notInitializedError, opt.WasInitialized())
@@ -77,7 +45,39 @@ func TestDefaultValue(t *testing.T) {
 		t.Errorf(getValueError, opt.GetValue(), test)
 	}
 
-	opt = Nillable(&nilTest).WithDefaultTypeValue(&anotherTest)
+}
+
+func TestOptionalNilCreation(t *testing.T) {
+	var err error
+	opt, err := NotNil(nilTest)
+
+	if opt.WasInitialized() {
+		t.Errorf(initializedError, opt.WasInitialized())
+	} else if opt.GetValue() != nilTest {
+		t.Errorf(getValueError, opt.GetValue(), nilTest)
+	} else if err == nil {
+		t.Errorf(errorExpected, NILVALUE)
+	}
+
+	opt = Nillable(nilTest)
+
+	if opt.WasInitialized() {
+		t.Errorf(initializedError, opt.WasInitialized())
+	} else if opt.GetValue() != nilTest {
+		t.Errorf(getValueError, opt.GetValue(), nilTest)
+	}
+}
+
+func TestDefaultValue(t *testing.T) {
+	opt := Nillable(test).WithDefaultTypeValue(anotherTest)
+
+	if !opt.WasInitialized() {
+		t.Errorf(notInitializedError, opt.WasInitialized())
+	} else if opt.GetValue() != test {
+		t.Errorf(getValueError, opt.GetValue(), test)
+	}
+
+	opt = Nillable(nilTest).WithDefaultTypeValue(anotherTest)
 
 	if opt.WasInitialized() {
 		t.Errorf(initializedError, opt.WasInitialized())
@@ -94,6 +94,6 @@ func TestDefaultValueWrongType(t *testing.T) {
 		}
 	}()
 
-	opt := Nillable(&test).WithDefaultTypeValue(&wrongTypeTest)
+	opt := Nillable(test).WithDefaultTypeValue(wrongTypeTest)
 	opt.GetValue()
 }
