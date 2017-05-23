@@ -6,7 +6,7 @@ Quickly complete a nil check for the following code:
 ```go
   type testStruct struct {}
 
-  opt, err := optional.From(nil).NotNil()
+  opt, err := optional.NotNil(nil)
 
   fmt.Println(err)
   // "Given value was nil"
@@ -15,10 +15,10 @@ Quickly complete a nil check for the following code:
 As well as being able to quickly check for nils it is also possible to query an Optional to see whether or not:
 
 ```go
-  opt, _ := optional.From(nil).NotNil()
+  opt, _ := optional.NotNil(nil)
   opt.WasInitialized() // false
 
-  opt = optional.From(testStruct{}).NotNil()
+  opt = optional.NotNil(interface{}(testStruct{}))
   opt.WasInitialized() // true
 
   // it is also possible to query the Optional's value:
@@ -28,7 +28,7 @@ As well as being able to quickly check for nils it is also possible to query an 
 Through an Optional it is also possible to set a default value for nil values using the "Nillable" strategy:
 
 ```go
-  opt := optional.From(nil).Nillable() // note the lack of an error here as values are allowed to be nil
+  opt := optional.Nillable(nil) // note the lack of an error here as values are allowed to be nil
   opt.WasInitialized() // false
 
   opt.GetValue() // nil
