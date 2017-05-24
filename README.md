@@ -1,4 +1,4 @@
-# Optional
+# Optional [![Go Report Card](https://goreportcard.com/badge/github.com/sc14jw/optional)](https://goreportcard.com/report/github.com/sc14jw/optional)
 A small library for quickly dealing with nil pointers in go based heavily from the Guava package for java (https://github.com/google/guava/wiki/UsingAndAvoidingNullExplained).
 
 Quickly complete a nil check for the following code:
