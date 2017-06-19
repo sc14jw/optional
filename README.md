@@ -37,4 +37,4 @@ Through an Optional it is also possible to set a default value for nil values us
   opt.GetValue() // testStruct{}
   ```
 
-  The "WithDefaultValue" method will attempt to preserve run-time thread safety through reflection panicing, should the incorrect type be passed as a parameter.
+  The "WithDefaultValue" method will attempt to preserve run-time thread safety through reflection panicking, should the incorrect type be passed as a parameter.
