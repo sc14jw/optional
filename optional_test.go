@@ -8,6 +8,8 @@ const getValueError = "GetValue returned %v not expected %v."
 const wrongError = "Error was %v not expected."
 const errorExpected = "No Error was returned. Expected %v."
 const panicExpected = "The Optional did not panic."
+const errorText = "This is an error."
+const expectedErrorText = "Expected 'This is an error.' But got %v."
 
 const helloWorld = "Hello World!"
 
@@ -45,6 +47,16 @@ func TestOptionalCreation(t *testing.T) {
 		t.Errorf(getValueError, opt.GetValue(), test)
 	}
 
+	var secondErr error
+	optSecond, secondErr := NotNilWithMessage(test, errorText)
+	if !optSecond.WasInitialized() {
+		t.Errorf(notInitializedError, optSecond.WasInitialized())
+	} else if optSecond.GetValue() != test {
+		t.Errorf(getValueError, optSecond.GetValue(), test)
+	} else if secondErr != nil {
+		t.Errorf(wrongError, err)
+	}
+
 }
 
 func TestOptionalNilCreation(t *testing.T) {
@@ -65,6 +77,17 @@ func TestOptionalNilCreation(t *testing.T) {
 		t.Errorf(initializedError, opt.WasInitialized())
 	} else if opt.GetValue() != nilTest {
 		t.Errorf(getValueError, opt.GetValue(), nilTest)
+	}
+
+	secondOpt, secondErr := NotNilWithMessage(nilTest, errorText)
+	if secondOpt.WasInitialized() {
+		t.Errorf(initializedError, secondOpt.WasInitialized())
+	} else if secondOpt.GetValue() != nilTest {
+		t.Errorf(getValueError, secondOpt.GetValue(), nilTest)
+	} else if secondErr == nil {
+		t.Errorf(errorExpected, NILVALUE)
+	} else if secondErr.Error() != errorText {
+		t.Errorf(expectedErrorText, secondErr)
 	}
 }
 

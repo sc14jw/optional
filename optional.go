@@ -45,6 +45,18 @@ func NotNil(v interface{}) (*Optional, error) {
 	return opt, nil
 }
 
+// NotNilWithMessage creates an Optional from a non nil value. Returns the Optional and should the Optional's value be nil a error with the given error message
+func NotNilWithMessage(v interface{}, e string) (*Optional, error) {
+	opt := from(v)
+
+	if opt.v == nil {
+		return opt, fmt.Errorf(e)
+	}
+
+	opt.init = true
+	return opt, nil
+}
+
 // WithDefaultTypeValue set a given Optional to use a given default value should the Optional be un-Initialized. Panics if default value is incorrect type for the current Optional. Should the Optional's value be nil will allow all types (due to the type being interface{}) Returns the Optional.
 func (opt *Optional) WithDefaultTypeValue(def interface{}) *Optional {
 
