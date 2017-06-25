@@ -71,6 +71,14 @@ func TestOptionalNilCreation(t *testing.T) {
 		t.Errorf(errorExpected, NILVALUE)
 	}
 
+	var nilPointer *interface{}
+	opt, err = NotNil(nilPointer)
+	if opt.WasInitialized() {
+		t.Errorf(initializedError, opt.WasInitialized())
+	} else if err == nil {
+		t.Errorf(errorExpected, NILVALUE)
+	}
+
 	opt = Nillable(nilTest)
 
 	if opt.WasInitialized() {
@@ -79,12 +87,26 @@ func TestOptionalNilCreation(t *testing.T) {
 		t.Errorf(getValueError, opt.GetValue(), nilTest)
 	}
 
+	opt = Nillable(nilPointer)
+	if opt.WasInitialized() {
+		t.Errorf(initializedError, opt.WasInitialized())
+	}
+
 	secondOpt, secondErr := NotNilWithMessage(nilTest, errorText)
 	if secondOpt.WasInitialized() {
 		t.Errorf(initializedError, secondOpt.WasInitialized())
 	} else if secondOpt.GetValue() != nilTest {
 		t.Errorf(getValueError, secondOpt.GetValue(), nilTest)
 	} else if secondErr == nil {
+		t.Errorf(errorExpected, NILVALUE)
+	} else if secondErr.Error() != errorText {
+		t.Errorf(expectedErrorText, secondErr)
+	}
+
+	opt, err = NotNilWithMessage(nilPointer, errorText)
+	if opt.WasInitialized() {
+		t.Errorf(initializedError, opt.WasInitialized())
+	} else if err == nil {
 		t.Errorf(errorExpected, NILVALUE)
 	} else if secondErr.Error() != errorText {
 		t.Errorf(expectedErrorText, secondErr)
